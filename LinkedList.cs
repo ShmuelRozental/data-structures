@@ -69,11 +69,11 @@ namespace LinkedList
 
         }
 
-        public void Display()
+        public string Display()
         {
             if (Head == null)
             {
-                return;
+                return"";
             }
 
             Node<T> current = Head;
@@ -92,8 +92,137 @@ namespace LinkedList
             return result;
         }
 
-        public void Remove(Node<T> node) 
+
+        public int Length()
         {
+            int count = 0;
+            Node<T> current = Head;
+
+            while (current != null)
+            {
+                count++;
+                current = current.GetNext();
+            }
+
+            return count;
+        }
+
+
+
+        public void RemoveIndex(int index)
+         {
+            if (index < 0 || Head == null)
+                throw new ArgumentOutOfRangeException("Index out of range or list is empty.");
+
+            if (index == 0)
+            {
+                Head = Head.GetNext(); 
+                return;
+            }
+
+            Node<T> current = Head;
+            for (int i = 0; i < index - 1; i++)
+            {
+                if (current.GetNext() == null)
+                    throw new ArgumentOutOfRangeException("Index out of range.");
+                current = current.GetNext();
+            }
+
+            Node<T> nodeToRemove = current.GetNext();
+            if (nodeToRemove != null)
+                current.SetNext(nodeToRemove.GetNext());
+        }
+
+
+        public void RemoveValue(T data)
+        {
+            if (Head == null)
+                return; 
+
+            if (Head.GetValue().Equals(data))
+            {
+                Head = Head.GetNext();
+                return;
+            }
+
+            Node<T> current = Head;
+            while (current.GetNext() != null)
+            {
+          
+                if (current.GetNext().GetValue().Equals(data))
+                {
+                    current.SetNext(current.GetNext().GetNext());
+                    return; 
+                }
+                current = current.GetNext();
+            }
+        }
+
+        public void RemoveAllValues(T data)
+        {
+            while (Head != null && Head.GetValue().Equals(data))
+            {
+                Head = Head.GetNext();
+            }
+
+        
+            if (Head == null)
+                return;
+
+            Node<T> current = Head;
+
+           
+            while (current.GetNext() != null)
+            {
+                if (current.GetNext().GetValue().Equals(data))
+                {
+                    current.SetNext(current.GetNext().GetNext());
+                }
+                else
+                {
+                    current = current.GetNext();
+                }
+            }
+        }
+
+        public int Find(T data)
+            {
+                Node<T> current = Head;
+                int index = 0;
+
+                while (current != null)
+                {
+                    if (current.GetValue().Equals(data))
+                        return index;
+                    current = current.GetNext();
+                    index++;
+                }
+
+                return -1;
+            }
+        public T Get(int index)
+        {
+            if (index < 0)
+            {
+                return;
+            }
+
+            Node<T> current = Head;
+            int currentIndex = 0;
+
+            while (current != null)
+            {
+                if (currentIndex == index)
+                {
+                    return current.GetValue();
+                }
+                current = current.GetNext();
+                currentIndex++;
+            }
+
+            return;
+        }
+
 
 
 
