@@ -204,7 +204,7 @@ namespace LinkedList
         {
             if (index < 0)
             {
-                return;
+                throw new ArgumentOutOfRangeException(nameof(index), "Index is negative.");
             }
 
             Node<T> current = Head;
@@ -220,7 +220,7 @@ namespace LinkedList
                 currentIndex++;
             }
 
-            return;
+            throw new ArgumentOutOfRangeException(nameof(index), "Index out of range.");
         }
 
 
