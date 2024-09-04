@@ -1,230 +1,175 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace LinkedList
+public class Node
 {
-    internal class Node<T>
+    public int Data { get; set; }
+    public Node Next { get; set; }
+
+    public Node(int data)
     {
-        T Value;
-        Node<T> Next;
+        Data = data;
+        Next = null;
+    }
+}
 
-        public T GetValue()
-        {
-            return Value;
-        }
-        public Node<T> GetNext()
-        {
-            return Next;
-        }
+public class LinkedList
+{
+    private Node head;
 
-        public void SetValue(T value)
-        {
-            this.Value = value;
-        }
-        public void SetNext(Node<T> next)
-        {
-            Next = next;
-        }
+    public LinkedList()
+    {
+        head = null;
+    }
 
-        public Node(T value)
+    // זמן ריצה: O(n)
+    public int Length()
+    {
+        int count = 0;
+        Node current = head;
+        while (current != null)
         {
-            this.Value = value;
+            count++;
+            current = current.Next;
+        }
+        return count;
+    }
+
+    // זמן ריצה: O(n)
+    public void Add(int value)
+    {
+        Node newNode = new Node(value);
+        if (head == null)
+        {
+            head = newNode;
+        }
+        else
+        {
+            Node current = head;
+            while (current.Next != null)
+            {
+                current = current.Next;
+            }
+            current.Next = newNode;
         }
     }
 
-
-    internal class LinkedList<T>
+    // זמן ריצה: O(n)
+    public void RemoveValue(int value)
     {
-        private Node<T> Head;
+        if (head == null) return;
 
-        public LinkedList()
+        if (head.Data == value)
         {
-            this.Head = null;
+            head = head.Next;
+            return;
         }
 
-        public LinkedList(T data)
+        Node current = head;
+        while (current.Next != null && current.Next.Data != value)
         {
-            Head = new Node<T>(data);
+            current = current.Next;
         }
 
-        public void Add(Node<T> newNode) {
-            {
-                Node<T> current = Head;
-                if (current == null)
-                {
-                    Head = newNode;
-                }
-                else
-                {
-                    while (current.GetNext != null)
-                    {
-                        current = current.GetNext();
-                    }
-                    current.SetNext(newNode);
-                }
-            }
-
-        }
-
-        public string Display()
+        if (current.Next != null)
         {
-            if (Head == null)
-            {
-                return"";
-            }
-
-            Node<T> current = Head;
-            string result = "";
-
-            while (current != null)
-            {
-                result += current.GetValue().ToString();
-                if (current.GetNext() != null)
-                {
-                    result += " -> ";
-                }
-                current = current.GetNext();
-            }
-
-            return result;
+            current.Next = current.Next.Next;
         }
+    }
 
-
-        public int Length()
+    // זמן ריצה: O(n)
+    public void RemoveAllValues(int value)
+    {
+        while (head != null && head.Data == value)
         {
-            int count = 0;
-            Node<T> current = Head;
-
-            while (current != null)
-            {
-                count++;
-                current = current.GetNext();
-            }
-
-            return count;
+            head = head.Next;
         }
 
-
-
-        public void RemoveIndex(int index)
-         {
-            if (index < 0 || Head == null)
-                throw new ArgumentOutOfRangeException("Index out of range or list is empty.");
-
-            if (index == 0)
-            {
-                Head = Head.GetNext(); 
-                return;
-            }
-
-            Node<T> current = Head;
-            for (int i = 0; i < index - 1; i++)
-            {
-                if (current.GetNext() == null)
-                    throw new ArgumentOutOfRangeException("Index out of range.");
-                current = current.GetNext();
-            }
-
-            Node<T> nodeToRemove = current.GetNext();
-            if (nodeToRemove != null)
-                current.SetNext(nodeToRemove.GetNext());
-        }
-
-
-        public void RemoveValue(T data)
+        Node current = head;
+        while (current != null && current.Next != null)
         {
-            if (Head == null)
-                return; 
-
-            if (Head.GetValue().Equals(data))
+            if (current.Next.Data == value)
             {
-                Head = Head.GetNext();
-                return;
+                current.Next = current.Next.Next;
             }
-
-            Node<T> current = Head;
-            while (current.GetNext() != null)
+            else
             {
-          
-                if (current.GetNext().GetValue().Equals(data))
-                {
-                    current.SetNext(current.GetNext().GetNext());
-                    return; 
-                }
-                current = current.GetNext();
+                current = current.Next;
             }
         }
+    }
 
-        public void RemoveAllValues(T data)
+    // זמן ריצה: O(n)
+    public void RemoveIndex(int index)
+    {
+        if (index < 0 || head == null) return;
+
+        if (index == 0)
         {
-            while (Head != null && Head.GetValue().Equals(data))
-            {
-                Head = Head.GetNext();
-            }
-
-        
-            if (Head == null)
-                return;
-
-            Node<T> current = Head;
-
-           
-            while (current.GetNext() != null)
-            {
-                if (current.GetNext().GetValue().Equals(data))
-                {
-                    current.SetNext(current.GetNext().GetNext());
-                }
-                else
-                {
-                    current = current.GetNext();
-                }
-            }
+            head = head.Next;
+            return;
         }
 
-        public int Find(T data)
-            {
-                Node<T> current = Head;
-                int index = 0;
-
-                while (current != null)
-                {
-                    if (current.GetValue().Equals(data))
-                        return index;
-                    current = current.GetNext();
-                    index++;
-                }
-
-                return -1;
-            }
-        public T Get(int index)
+        Node current = head;
+        for (int i = 0; i < index - 1; i++)
         {
-            if (index < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), "Index is negative.");
-            }
-
-            Node<T> current = Head;
-            int currentIndex = 0;
-
-            while (current != null)
-            {
-                if (currentIndex == index)
-                {
-                    return current.GetValue();
-                }
-                current = current.GetNext();
-                currentIndex++;
-            }
-
-            throw new ArgumentOutOfRangeException(nameof(index), "Index out of range.");
+            if (current.Next == null) return;
+            current = current.Next;
         }
 
+        if (current.Next != null)
+        {
+            current.Next = current.Next.Next;
+        }
+    }
 
+    // זמן ריצה: O(n)
+    public int Find(int value)
+    {
+        Node current = head;
+        int index = 0;
+        while (current != null)
+        {
+            if (current.Data == value)
+            {
+                return index;
+            }
+            current = current.Next;
+            index++;
+        }
+        return -1; 
+    }
 
+    // זמן ריצה: O(n)
+    public int Get(int index)
+    {
+        if (index < 0) return -1;
 
+        Node current = head;
+        for (int i = 0; i < index; i++)
+        {
+            if (current == null) return -1;
+            current = current.Next;
+        }
+
+        return current != null ? current.Data : -1;
+    }
+
+    // זמן ריצה: O(n)
+    public string Display()
+    {
+        if (head == null) return "";
+
+        Node current = head;
+        string result = "";
+        while (current != null)
+        {
+            result += current.Data;
+            if (current.Next != null)
+            {
+                result += " -> ";
+            }
+            current = current.Next;
+        }
+        return result;
     }
 }
